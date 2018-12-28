@@ -40,13 +40,11 @@ data(rivers)
 #get the standard deviation of rivers data
 st_dev<-sd(rivers)
 
-#define upper and lower limits based on standard deviation
-upper_limit<-mean(rivers)+2*st_dev
-lower_limit<-mean(rivers)-2*st_dev
+#determine the z-scores of the data
+z_scores<-(rivers-mean(rivers))/st_dev
 
-#classify outliers based on upper and lower limits
-upper_outliers<-rivers[which(rivers>upper_limit)]
-lower_outliers<-rivers[which(rivers<lower_limit)]
+#classify outliers based on observations with z_scores above or below 2
+outliers<-rivers[which(z_scores>2 | z_scores<(-2))]
 
 #rename columns of height-weight data
 names(raw)<-c('index','height','weight')
@@ -132,4 +130,40 @@ raw[low_outliers,]
 plot(raw$period,raw$sales,type='o')
 points(raw$period[high_outliers],raw$sales[high_outliers],pch=19,col='red')
 points(raw$period[low_outliers],raw$sales[low_outliers],pch=19,col='blue')
+
+
+#create the data for contextual and collective anomalies
+x<-1:round(2*pi*100+100)/100
+y<-rep(0,round(2*pi*100)+100)
+y[1:314]<-sin(x[1:314])
+y[415:728]<-sin(x[315:628])
+y[100]<-0
+
+#plot the data for contextual and collective anomalies
+plot(x,y,type='o')
+
+#calculate a first difference
+difference_y<-y[2:length(y)]-y[1:(length(y)-1)]
+
+#boxplot of lag
+boxplot(lag_y)
+
+#detect collective anomalies
+changes<-NULL
+ks<-NULL
+k<-51
+
+while(k<(length(y)-50)){
+changes<-c(changes,max(abs(y[k-50]),abs(y[k+50])))
+ks<-c(ks,k)
+k<-k+1
+}
+
+boxplot(changes)
+
+#find the collective anomaly
+print(ks[which(changes==min(changes))]) 
+print(y[ks[which(changes==min(changes))]]) 
+
+
 
