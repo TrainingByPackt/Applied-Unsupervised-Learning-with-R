@@ -146,7 +146,7 @@ plot(x,y,type='o')
 difference_y<-y[2:length(y)]-y[1:(length(y)-1)]
 
 #boxplot of lag
-boxplot(lag_y)
+boxplot(difference_y)
 
 #detect collective anomalies
 changes<-NULL
