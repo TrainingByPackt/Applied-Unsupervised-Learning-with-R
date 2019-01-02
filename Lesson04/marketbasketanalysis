@@ -3,84 +3,68 @@
 #This code covers market basket analysis
 
 
-#we will use data from https://web.stanford.edu/~hastie/ElemStatLearn/
+#we will use data from http://archive.ics.uci.edu/ml/datasets/Adult
 
 #first, download this data to your computer as described in the lesson
 
 #set a filepath and read the data in
 #you will need to replace the '' with the location of the data on your computer
-filepath=''
-mkt<-read.csv(filepath,stringsAsFactors=FALSE,header=FALSE,sep=' ')
+filepath='census.csv'
+mkt<-read.csv(filepath,stringsAsFactors=FALSE,header=FALSE,sep=',')
 
 #next, we will create dummy variables manually for each of the variables in the dataset
 #manual way to create dummy variables
-mkt$low_income<-1*(mkt$V1<=5)
-mkt$high_income<-1*(mkt$V1>5)
+mkt$old<-1*(mkt$V1>median(mkt$V1))
+mkt$young<-1*(mkt$V1<=median(mkt$V1))
 
-mkt$male<-1*(mkt$V2==1)
-mkt$female<-1*(mkt$V2==2)
+mkt$government_employee<-1*(mkt$V2 %in% c(" State-gov"," Local-gov"," Federal-gov"))
+mkt$self_employed<-1*(mkt$V2 %in% c(" Self-emp-not-inc"," Self-emp-inc"))
+mkt$never_worked<-1*(mkt$V2 %in% c(" Never-worked"))
+mkt$private_employment<-1*(mkt$V2 %in% c(" Private"))
+mkt$other_employment<-1*(mkt$V2 %in% c(" ?"," Without-pay" ))
 
-mkt$married<-1*(mkt$V3==1)
-mkt$livingtogether<-1*(mkt$V3==2)
-mkt$divorced<-1*(mkt$V3==3)
-mkt$widowed<-1*(mkt$V3==4)
-mkt$single<-1*(mkt$V3==5)
+mkt$high_school_incomplete<-1*(mkt$V4 %in% c(" 1st-4th"," Preschool"," 5th-6th"," 7th-8th"," 9th"," 10th"," 11th"," 12th"))
+mkt$high_school_complete<-1*(mkt$V4 %in% c(" HS-grad"," Some-college"," Assoc-acdm"," Assoc-voc"))
+mkt$bachelors<-1*(mkt$V4 %in% c(" Bachelors"))
+mkt$post_bachelors<-1*(mkt$V4 %in% c(" HS-grad", " Masters"," Prof-school"," Doctorate" ))
 
-mkt$young<-1*(mkt$V4<=3)
-mkt$old<-1*(mkt$V4>3)
 
-mkt$low_edu<-1*(mkt$V5<=3)
-mkt$high_edu<-1*(mkt$V5>3)
+mkt$married<-1*(mkt$V6 %in% c(" Married-civ-spouse"," Married-AF-spouse"," Married-spouse-absent"))
+mkt$never_married<-1*(mkt$V6 %in% c(" Never-married"))
+mkt$divorced_separated<-1*(mkt$V6 %in% c(" Divorced"," Separated"))
+mkt$widowed<-1*(mkt$V6 %in% c( " Widowed"))
 
-mkt$managerial<-1*(mkt$V6==1)
-mkt$sales<-1*(mkt$V6==2)
-mkt$laborer<-1*(mkt$V6==3)
-mkt$clerical<-1*(mkt$V6==4)
-mkt$homemaker<-1*(mkt$V6==5)
-mkt$student<-1*(mkt$V6==6)
-mkt$military<-1*(mkt$V6==7)
-mkt$retired<-1*(mkt$V6==8)
-mkt$unemployed<-1*(mkt$V6==9)
 
-mkt$newtoarea<-1*(mkt$V7<=2)
-mkt$longinarea<-1*(mkt$V7>2)
+mkt$clerical<-1*(mkt$V7 %in% c(" Adm-clerical"))
+mkt$managerial<-1*(mkt$V7 %in% c(" Exec-managerial"))
+mkt$moving<-1*(mkt$V7 %in% c(" Transport-moving"))
+mkt$farming_fishing<-1*(mkt$V7 %in% c(" Farming-fishing"))
+mkt$craft_repair<-1*(mkt$V7 %in% c(" Craft-repair" ))
+mkt$sales<-1*(mkt$V7 %in% c(" Sales"))
+mkt$tech_support<-1*(mkt$V7 %in% c(" Tech-support"))
+mkt$service<-1*(mkt$V7 %in% c(" Protective-serv"," Priv-house-serv", " Other-service"))
+mkt$armed_forces<-1*(mkt$V7 %in% c(" Armed-Forces"))
+mkt$other_employment<-1*(mkt$V7 %in% c(" Handlers-cleaners"," ?"," Machine-op-inspct"," Prof-specialty"))
 
-mkt$notmarried<-1*(mkt$V8==1)
-mkt$dualincome<-1*(mkt$V8==2)
-mkt$singleincome<-1*(mkt$V8==3)
 
-mkt$smallhousehold<-1*(mkt$V9<=4)
-mkt$largehousehold<-1*(mkt$V9>4)
+mkt$white<-1*(mkt$V9 %in% c(" White"))
+mkt$black<-1*(mkt$V9 %in% c(" Black"))
+mkt$asian<-1*(mkt$V9 %in% c(" Asian-Pac-Islander"))
+mkt$amer_indian_eskimo<-1*(mkt$V9 %in% c(" Amer-Indian-Eskimo"))
+mkt$other<-1*(mkt$V9 %in% c(" Other"))
 
-mkt$oldhousehold<-1*(mkt$V10<=4)
-mkt$younghousehold<-1*(mkt$V10>4)
+mkt$male<-1*(mkt$V10 %in% c(" Male"))
+mkt$female<-1*(mkt$V10 %in% c(" Female"))
 
-mkt$own<-1*(mkt$V11==1)
-mkt$rent<-1*(mkt$V11==2)
-mkt$parents<-1*(mkt$V11==3)
+mkt$high_hours<-1*(mkt$V13 > median(mkt$V13))
+mkt$low_hours<-1*(mkt$V13 <= median(mkt$V13))
 
-mkt$house<-1*(mkt$V12==1)
-mkt$condo<-1*(mkt$V12==2)
-mkt$apartment<-1*(mkt$V12==3)
-mkt$mobilehome<-1*(mkt$V12==4)
-mkt$otherhome<-1*(mkt$V12==5)
-
-mkt$amerindian<-1*(mkt$V13==1)
-mkt$asian<-1*(mkt$V13==2)
-mkt$black<-1*(mkt$V13==3)
-mkt$eastindian<-1*(mkt$V13==4)
-mkt$hispanic<-1*(mkt$V13==5)
-mkt$pacificislander<-1*(mkt$V13==6)
-mkt$white<-1*(mkt$V13==7)
-mkt$otherethnic<-1*(mkt$V13==8)
-
-mkt$english<-1*(mkt$V14==1)
-mkt$spanish<-1*(mkt$V14==2)
-mkt$otherlanguage<-1*(mkt$V14==3)
+mkt$low_income<-1*(mkt$V15==" <=50K")
+mkt$high_income<-1*(mkt$V15==" >50K")
 
 
 #create a dataframe called mktdummies that contains only these dummy variables
-mktdummies<-mkt[,15:ncol(mkt)]
+mktdummies<-mkt[,16:ncol(mkt)]
 
 #check the means of each of the dummy variables
 print(colMeans(mktdummies,na.rm=TRUE))
