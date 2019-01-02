@@ -1,79 +1,18 @@
-
-#market basket analysis
-
-#one scenario:
-#you own a grocery store
-#you want to know where to place everything
-
-#how do you answer that question?
-
-#optimize for convenience: if people eat things together, then they will buy them together, so we should place them together
-
-#optimize for impulse purchases: small things by cashiers where people wait
-
-#optimize for inconvenience
-#put the milk at the back of the store
-#optimize for product exposure
-
-#three ways to optimize
-#how do we decide which way to optimize?
-
-#experiment. maximize revenues or profits
-
-#remember: gains might be short term
-#if we maximize for inconvenience, we could get short term gains
-#but long term losses
-#reputation effects
+#This is code for Lesson 4 of
+#Applied Unsupervised Learning with R
+#This code covers market basket analysis
 
 
-#get some shopping data
-#get RULES
+#we will use data from https://web.stanford.edu/~hastie/ElemStatLearn/
 
-#potential rule: when people buy peanut butter, they also buy jelly
-#potential rule: when people buy pb and j, they also buy bread
+#first, download this data to your computer as described in the lesson
 
-#peanut butter/jelly sandwiches
+#set a filepath and read the data in
+#you will need to replace the '' with the location of the data on your computer
+filepath=''
+mkt<-read.csv(filepath,stringsAsFactors=FALSE,header=FALSE,sep=' ')
 
-#transaction 1: peanut butter, jelly, bread
-#transaction 2: peanut butter, eggs, milk
-#transaction 3: peanut butter, jelly, beef
-#transaction 4: peanut butter, jelly, bread, apples
-
-#if you have thousands of products and millions of transactions,
-#it's infeasible to check every rule
-
-#your goal is to find a rule like the following:
-#every time people buy peanut butter and jelly, they also buy bread
-
-#why this is useful: 
-#reason 1: product placement: know what people buy together, to place them optimally
-#reason 2: advertising: increase sales of something because you know who to target
-
-
-#support: total fraction of the all transactions represented by the chosen basket
-
-#confidence: support of total divided by support of antecedent
-#confidence is sort of like Pr(B|A)
-
-#lift is the confidence of the rule divided by the support of the consequent
-
-
-
-#As an example, suppose the item set K = { peanut butter, jelly, bread } and consider the rule { peanut butter, jelly } ⇒ { bread }. A support value of 0.03 for this rule means that peanut butter , jelly , and bread appeared together in 3% of the market baskets. A confidence of 0.82 for this rule implies that when peanut butter and jelly were purchased, 82% of the time bread was also purchased. If bread appeared in 43% of all market baskets then the rule { peanut butter, jelly } ⇒ { bread } would have a lift of 1.95.
-
-
-#apriori algorithm
-#1. take all single-item sets that match the support threshold
-#2. considering those sets, find two-item sets that match the support threshold
-#considering these, find three-item sets that match the threshold
-#and so on
-
-
-#marketing data from https://web.stanford.edu/~hastie/ElemStatLearn/
-mkt<-read.csv('/home/bradfordtuckfield/Documents/viax/marketing.txt',stringsAsFactors=FALSE,header=FALSE,sep=' ')
-
-
-
+#next, we will create dummy variables manually for each of the variables in the dataset
 #manual way to create dummy variables
 mkt$low_income<-1*(mkt$V1<=5)
 mkt$high_income<-1*(mkt$V1>5)
@@ -139,25 +78,25 @@ mkt$english<-1*(mkt$V14==1)
 mkt$spanish<-1*(mkt$V14==2)
 mkt$otherlanguage<-1*(mkt$V14==3)
 
+
+#create a dataframe called mktdummies that contains only these dummy variables
 mktdummies<-mkt[,15:ncol(mkt)]
 
-#example: set 10% support threshold
-support_thresh<-0.1
-
-#first, get the mean of every variable
+#check the means of each of the dummy variables
 print(colMeans(mktdummies,na.rm=TRUE))
 
-#first rule
+#set a support threshold - here we use 10%
+support_thresh<-0.1
+
+#next, we will do our first pass through the data
 firstpass<-unname(which(colMeans(mktdummies,na.rm=TRUE)>support_thresh))
 
-#firstpass<-which(colMeans(mktdummies,na.rm=TRUE)>support_thresh)
-
-print(firstpass)
-
-#possibilities for second pass
+#next, we will do our second pass
+#start by finding the possible two-item baskets
 secondcand<-t(combn(firstpass,2))
 secondpass<-NULL
 
+#next, iterate through each candidate basket to see which ones meet the support threshold
 k<-1
 while(k<=nrow(secondcand)){
 support<-mean(mktdummies[,secondcand[k,1]]*mktdummies[,secondcand[k,2]],na.rm=TRUE)
@@ -169,7 +108,8 @@ secondpass<-rbind(secondpass,secondcand[k,])
 k<-k+1
 }
 
-#three-product baskets
+
+#next, we will do three-item baskets
 thirdpass<-NULL
 k<-1
 while(k<=nrow(secondpass)){
@@ -193,6 +133,7 @@ j<-j+1
 k<-k+1
 }
 
+#finally, we can do the fourth pass through the data
 
 fourthpass<-NULL
 k<-1
@@ -218,53 +159,34 @@ k<-k+1
 }
 
 
-#why would we do this for something other than grocery baskets
-#a few reasons:
 
-#1. advertising based on these things
-#2. deciding target demographics
-#3. deciding inventory management and product placements
-#4. 
+#now we are ready to generate associative rules
 
-#apartment is our 37th item
-apt3<-thirdpass[which(thirdpass[,3]==37),]
+#we will set thresholds for confidence and lift
+lift_thresh<-1.8
+conf_thresh<-.8
 
-apt3_conf<-NULL
-
-#calculate confidence and lift levels
-#confidence is conditional: given that you buy peanut butter and jelly, what is the likelihood that you buy bread
-
-#lift is confidence divided by the probability of the target product
-
-#confidence: if you buy pb and j, you are 80% likely to buy bread
-#80% is confidence of that rule
-
-#I don't care. because 79% of all people buy bread anyway
-
-#knowing pb and j, has improved your prediction of bread 1%
-#lift is 80%/79%, it's the improvement the rule gives
-
-#40% of people buy bread
-#conditional on pb and j, 80% buy bread
-#lift is 2, 
-
-
+#we calculate lift and confidence for each candidate rule
+thirdpass_conf<-NULL
 k<-1
-while(k<=nrow(apt3)){
-
+while(k<=nrow(thirdpass)){
+ 
 support<-mean(mktdummies[,thirdpass[k,1]]*mktdummies[,thirdpass[k,2]]*mktdummies[,thirdpass[k,3]],na.rm=TRUE)
-
+ 
 confidence<-mean(mktdummies[,thirdpass[k,1]]*mktdummies[,thirdpass[k,2]]*mktdummies[,thirdpass[k,3]],na.rm=TRUE)/mean(mktdummies[,thirdpass[k,1]]*mktdummies[,thirdpass[k,2]],na.rm=TRUE)
-
+ 
 lift<-confidence/mean(mktdummies[,thirdpass[k,3]],na.rm=TRUE)
-
-apt3_conf<-rbind(apt3_conf,unname(c(apt3[k,],support,confidence,lift)))
+ 
+thirdpass_conf<-rbind(thirdpass_conf,unname(c(thirdpass[k,],support,confidence,lift)))
 k<-k+1
 }
 
 
-lift_thresh<-1.5
-conf_thresh<-.6
+#we filter our rules by which ones have the highest confidence and lift
+thirdpass_high<-thirdpass_conf[which(thirdpass_conf[,5]>conf_thresh & thirdpass_conf[,6]>lift_thresh),]
 
 
-apt3_high<-apt3_conf[which(apt3_conf[,5]>conf_thresh & apt3_conf[,6]>lift_thresh),]
+#we examine the rules we found - this is the final outcome of the Apriori algorithm and market basket analysis
+
+print(thirdpass_high)
+
