@@ -1,4 +1,4 @@
-ta<-iris[,1:2]
+iris_data<-iris[,1:2]
 
 library(cluster)
 km.res<-kmeans(iris_data,3)
