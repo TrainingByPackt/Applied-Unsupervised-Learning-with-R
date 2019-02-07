@@ -49,7 +49,7 @@ print(digest(string_to_hash,algo='md5'))
 
 
 #in this case, we will use the philly city hall image
-filepath<-'philly_city_hall.jpg'
+filepath<-'alamo.jpg'
 #note: if you set filepath<-'borges.jpg', you can get a signature of the borges image
 #note: if you set filepath<-'philly_city_hall_altered.jpg', you can get a signature of the altered City Hall image
 
