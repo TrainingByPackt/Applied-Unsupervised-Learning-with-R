@@ -1,19 +1,23 @@
 #This is the R code for Applied Unsupervised Learning with R, lesson 6
 
-#load the dataset for US Arrests
-data(USArrests)
-head(USArrests)
+#load the dataset for "mtcars"
+data(mtcars)
+head(mtcars)
 
-#create a boxplot for rape arrests
-boxplot(USArrests$Rape)
+#check the documentation for this dataset
+?mtcars
+
+#create a boxplot for car weight
+boxplot(mtcars$wt)
 
 #find the highest values (in this case, the outliers)
-highest<-USArrests[which(USArrests$Rape>40),]
+highest<-mtcars[which(mtcars$wt>5),]
 print(highest)
 
 #load the rivers dataset
 data(rivers)
 head(rivers)
+?rivers
 boxplot(rivers)
 
 #perform a logarithm transformation and look at the resulting boxplot
