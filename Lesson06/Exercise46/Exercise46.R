@@ -1,0 +1,11 @@
+changes<-NULL
+ks<-NULL
+k<-51
+while(k<(length(y)-50)){
+  changes<-c(changes,max(abs(y[k-50]),abs(y[k+50])))
+  ks<-c(ks,k)
+  k<-k+1
+}
+boxplot(changes)
+print(ks[which(changes==min(changes))]) 
+print(y[ks[which(changes==min(changes))]])
