@@ -1,4 +1,4 @@
-[![GitHub issues](https://img.shields.io/github/issues/TrainingByPackt/Unsupervised-Learning-with-R.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/issues)
+[![GitHub issues](https://img.shields.io/github/issues/TrainingByPackt/Applied-Unsupervised-Learning-with-R.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/issues)
 [![GitHub forks](https://img.shields.io/github/forks/TrainingByPackt/Unsupervised-Learning-with-R.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/network)
 [![GitHub stars](https://img.shields.io/github/stars/TrainingByPackt/Unsupervised-Learning-with-R.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/stargazers)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/pulls)
