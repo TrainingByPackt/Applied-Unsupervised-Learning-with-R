@@ -1,11 +1,11 @@
 [![GitHub issues](https://img.shields.io/github/issues/TrainingByPackt/Applied-Unsupervised-Learning-with-R.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/issues)
-[![GitHub forks](https://img.shields.io/github/forks/TrainingByPackt/Unsupervised-Learning-with-R.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/network)
-[![GitHub stars](https://img.shields.io/github/stars/TrainingByPackt/Unsupervised-Learning-with-R.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/stargazers)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/pulls)
+[![GitHub forks](https://img.shields.io/github/forks/TrainingByPackt/Applied-Unsupervised-Learning-with-R.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/network)
+[![GitHub stars](https://img.shields.io/github/stars/TrainingByPackt/Applied-Unsupervised-Learning-with-R.svg)](https://github.com/TrainingByPackt/Unsupervised-Learning-with-R/stargazers)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/TrainingByPackt/Applied-Unsupervised-Learning-with-R/pulls)
 
 
 
-# Unsupervised Learning with R
+# Applied Unsupervised Learning with R
 Starting with the basics, Applied Unsupervised Learning with R explains clustering methods, distribution analysis, data encoders, and features of R that enable you to understand your data better and get answers to your most pressing business questions. 
 This book begins with the most important and commonly used method for unsupervised learning - clustering - and explains the three main clustering algorithms - k-means, divisive, and agglomerative. Following this, you'll study market basket analysis, kernel density estimation, principal component analysis, and anomaly detection. You'll be introduced to these methods using code written in R, with further instructions on how to work with, edit, and improve R code. To help you gain a practical understanding, the book also features useful tips on applying these methods to real business problems, including market segmentation and fraud detection. By working through interesting activities, you'll explore data encoders and latent variable models. 
 By the end of this book, you will have a better understanding of different anomaly detection methods, such as outlier detection, Mahalanobis distances, and contextual and collective anomaly detection.
