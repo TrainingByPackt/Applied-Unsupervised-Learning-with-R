@@ -1,4 +1,4 @@
-string_to_hash<-print('Take the cake')
+string_to_hash<-"print('Take the cake')"
 
 total_possible_hashes<-10000
 numeric<-utf8ToInt(string_to_hash)
