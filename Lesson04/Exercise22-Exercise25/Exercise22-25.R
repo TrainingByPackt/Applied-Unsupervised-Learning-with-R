@@ -139,7 +139,7 @@ while(k<=nrow(thirdpass)){
   support<-mean(mktdummies[,thirdpass[k,1]]*mktdummies[,thirdpass[k,2]]*mktdummies[,thirdpass[k,3]],na.rm=TRUE)
   confidence<-mean(mktdummies[,thirdpass[k,1]]*mktdummies[,
                                                           thirdpass[k,2]]*mktdummies[,thirdpass[k,3]],na.rm=TRUE)/
-    mean(mktdummies[,thirdpass[k,1]]*mktdummies[,thirdpass[k,2]],na.m=TRUE)
+    mean(mktdummies[,thirdpass[k,1]]*mktdummies[,thirdpass[k,2]],na.rm=TRUE)
   lift<-confidence/mean(mktdummies[,thirdpass[k,3]],na.rm=TRUE)
   thirdpass_conf<-rbind(thirdpass_conf,unname(c(thirdpass[k,],support,confidence,lift)))
   k<-k+1
