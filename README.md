@@ -35,6 +35,6 @@ You’ll also need the following software installed in advance:
 * Browser: Google Chrome or Mozilla Firefox
 
 ### Note
-As the book contains grayscale images, you can have a look at the uploaded graphics bundle for the colored version.
+As the book contains grayscale images, please have a look at the uploaded graphics bundle uploaded here for the colored version.
 
 
