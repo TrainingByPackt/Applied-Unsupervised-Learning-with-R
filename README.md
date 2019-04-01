@@ -34,7 +34,7 @@ You’ll also need the following software installed in advance:
 * R (3.0.0 or more recent, available for free at https://cran.r-project.org/)
 * Browser: Google Chrome or Mozilla Firefox
 
-
-
+### Note
+As the book contains grayscale images, you can have a look at the uploaded graphics bundle for the colored version.
 
 
