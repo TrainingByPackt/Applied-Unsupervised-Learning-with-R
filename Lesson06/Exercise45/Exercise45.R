@@ -6,3 +6,4 @@ y[100]<-0
 plot(x,y,type='o')
 difference_y<-y[2:length(y)]-y[1:(length(y)-1)]
 boxplot(difference_y)
+which(difference_y>0.5)
